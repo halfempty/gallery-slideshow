@@ -1,0 +1,22 @@
+/* Slideshow */
+
+.gallerycontent { margin-left: 3em;}
+
+#gallerywrapper {width: 981px; overflow: hidden; margin: auto;}
+#gallerywrapper .slide {width: 981px; float: left; overflow: hidden;}
+
+#scrollwrapper { overflow: auto; padding: 0 0 0 3em;}
+#scrollwrapper .slide {padding-right: 3em; float: left; overflow: hidden;}
+#scrollwrapper .gallerycontent {overflow: hidden; clear: both; text-align: left; margin-left: 0;}
+
+#slidecontrols { -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -o-user-select: none; user-select: none; text-align: center;}
+#slidecontrols a { cursor: pointer; color: #666;}
+#slidecontrols a.inactive {color: #ccc;}
+
+
+.image {margin: auto;}
+.image p {margin: 0; text-align: center;}
+.description {margin: auto;}
+
+.thumbnails {width: 870px; margin: auto; overflow: hidden; display: none;}
+.thumbnails .thumb {float: left; margin: 1em; cursor: pointer; }
