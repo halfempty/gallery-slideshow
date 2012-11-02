@@ -1,57 +1,60 @@
 <?php
 /*
 Plugin Name: Gallery Slideshow
-Version: Carolyn 7/12
+Version: September 15 2012
 Author: Marty Spellerberg
 */
 
-function marty_gallery_scripts_method() {
+function gs_gallery_scripts_method() {
 
-    $kStyle = plugins_url( 'assets/slideshow.css' , __FILE__ ); // Static
-    wp_register_style('kStyle',$kStyle);
-    wp_enqueue_style( 'kStyle');
+    $gsStyle = plugins_url( 'assets/slideshow.css' , __FILE__ ); // Static
+    wp_register_style('gsStyle',$gsStyle);
+    wp_enqueue_style( 'gsStyle');
 
 	wp_enqueue_script( 'jquery');
 
-	// Fade
-	$martygallery_fadejs = plugins_url( '/assets/fade.js' , __FILE__ );
-	wp_register_script('martygallery_fadejs',$martygallery_fadejs);
-	wp_enqueue_script( 'martygallery_fadejs',array('jquery'));
+	// Hotkeys
+	$jquery_hotkeys = plugins_url( '/assets/jquery.hotkeys.js' , __FILE__ );
+	wp_register_script('jquery_hotkeys',$jquery_hotkeys);
+	wp_enqueue_script( 'jquery_hotkeys',array('jquery'));
 
-	// All Slideshow
-	$martygalleryjs = plugins_url( '/assets/slideshow.js' , __FILE__ );
-	wp_register_script('martygalleryjs',$martygalleryjs);
-	wp_enqueue_script( 'martygalleryjs',array('jquery','martygallery_fadejs'));
+	// Slideshow
+	$gsgalleryjs = plugins_url( '/assets/slideshow.js' , __FILE__ );
+	wp_register_script('gsgalleryjs',$gsgalleryjs);
+	wp_enqueue_script( 'gsgalleryjs',array('jquery','jquery_hotkeys'));
 
 }
 
-add_action('wp_enqueue_scripts', 'marty_gallery_scripts_method');
+add_action('wp_enqueue_scripts', 'gs_gallery_scripts_method');
 
 
 // Custom WordPress Meta Box
 // http://www.farinspace.com/how-to-create-custom-wordpress-meta-box/
 
 
-add_action('admin_init','my_meta_init');
+add_action('admin_init','gs_meta_init');
 
-function my_meta_init() {
+function gs_meta_init() {
 	// http://codex.wordpress.org/Function_Reference/add_meta_box
 
-	foreach (array('post','page') as $type) 
-	{
-		add_meta_box('my_all_meta', 'Gallery Slideshow', 'my_meta_setup', $type, 'normal', 'high');
+	$gsgalleryadminjs = plugins_url( '/gallery-slideshow.js' , __FILE__ );
+	wp_register_script('gsgalleryadminjs',$gsgalleryadminjs);
+	wp_enqueue_script( 'gsgalleryadminjs',array('jquery'));
+
+
+	foreach (array('post','page') as $type) {
+		add_meta_box('gs_all_meta', 'Gallery Slideshow', 'gs_meta_setup', $type, 'side', 'default');
 	}
 	
-	add_action('save_post','my_meta_save');
+	add_action('save_post','gs_meta_save');
 }
 
-function my_meta_setup()
-{
+function gs_meta_setup() {
 	global $post;
- 
-	// using an underscore, prevents the meta variable
-	// from showing up in the custom fields section
-	$meta = get_post_meta($post->ID,'_martygallery',TRUE);
+
+	// TODO: For backwards compatiblity we need to check _martygallery in addition to _gsgallery
+
+	$meta = get_post_meta($post->ID,'_gsgallery',TRUE);
 
 	if ( $meta[transition] == 'slide') {
 		$transition = 'slide';
@@ -59,62 +62,93 @@ function my_meta_setup()
 		$transition = 'fade';		
 	}
 
+	echo '<p><select id="gsgallery_mode" name="_gsgallery[mode]">';
 
+	echo '<option value="normal" ';
+		if( $meta['mode'] == 'normal' || !$meta['mode'] || $meta['mode'] == '' ) echo 'selected="selected"';
+	echo ' />Normal</option>';
+
+	echo '<option value="automatic" ';
+		if( $meta['mode'] == 'automatic' ) echo 'selected="selected"';
+	echo ' />Automatic</option>';
+
+	echo '</select></p>';
+
+
+
+/*
 	echo '<p>Transition: &nbsp; ';
 
-	echo '<input type="radio" name="_martygallery[transition]" value="fade" ';
+	echo '<input type="radio" name="_gsgallery[transition]" value="fade" ';
 	if ( $transition == 'fade' ) echo 'checked="checked"';
 	echo ' /> Fade &nbsp; ';
-/*
-	echo '<input type="radio" name="_martygallery[transition]" value="slide" ';
+
+	echo '<input type="radio" name="_gsgallery[transition]" value="slide" ';
 	if( $transition == 'slide' ) echo 'checked="checked"';
 	echo ' /> Slide &nbsp; ';
 */
 
 
 
-	$metathumbs = get_post_meta($post->ID,'_martygallery[thumbs]',TRUE);
+	$metathumbs = get_post_meta($post->ID,'_gsgallery[thumbs]',TRUE);
 
-	echo ' &nbsp; &nbsp; Thumbnails: &nbsp; ';
+	echo '<div class="gsgallery_thumbnails"><p>Thumbnails: &nbsp; ';
 
-	echo '<input type="radio" name="_martygallery[thumbs]" value="on" ';
+	echo '<input type="radio" name="_gsgallery[thumbs]" value="on" ';
 	if( $meta[thumbs] !== 'off' ) echo 'checked="checked"';
 	echo ' /> On &nbsp; ';
 
-	echo '<input type="radio" name="_martygallery[thumbs]" value="off" ';
+	echo '<input type="radio" name="_gsgallery[thumbs]" value="off" ';
 	if( $meta[thumbs] == 'off' ) echo 'checked="checked"';
+	echo ' /> Off &nbsp; </p></div>';
+
+
+
+
+
+/*
+	echo ' &nbsp; &nbsp;  Next gallery after last slide: &nbsp; ';
+
+	echo '<input type="radio" name="_gsgallery[next]" value="on" ';
+	if( $meta[next] == 'on' ) echo 'checked="checked"';
+	echo ' /> On &nbsp; ';
+
+	echo '<input type="radio" name="_gsgallery[next]" value="off" ';
+	if( $meta[next] !== 'on' ) echo 'checked="checked"';
 	echo ' /> Off &nbsp; ';
+
+
 	echo '</p>';
- 
+ */
 	// create a custom nonce for submit verification later
-	echo '<input type="hidden" name="my_meta_noncename" value="' . wp_create_nonce(__FILE__) . '" />';
+	echo '<input type="hidden" name="gs_meta_noncename" value="' . wp_create_nonce(__FILE__) . '" />';
 }
  
-function my_meta_save($post_id) {
-	if (!wp_verify_nonce($_POST['my_meta_noncename'],__FILE__)) return $post_id;
+function gs_meta_save($post_id) {
+	if (!wp_verify_nonce($_POST['gs_meta_noncename'],__FILE__)) return $post_id;
 	if ($_POST['post_type'] == 'page') {
 		if (!current_user_can('edit_page', $post_id)) return $post_id;
 	} else {
 		if (!current_user_can('edit_post', $post_id)) return $post_id;
 	}
 
-	$current_data = get_post_meta($post_id, '_martygallery', TRUE);	
+	$current_data = get_post_meta($post_id, '_gsgallery', TRUE);	
  
-	$new_data = $_POST['_martygallery'];
+	$new_data = $_POST['_gsgallery'];
 
-	my_meta_clean($new_data);
+	gs_meta_clean($new_data);
 	
 	if ($current_data) {
-		if (is_null($new_data)) delete_post_meta($post_id,'_martygallery');
-		else update_post_meta($post_id,'_martygallery',$new_data);
+		if (is_null($new_data)) delete_post_meta($post_id,'_gsgallery');
+		else update_post_meta($post_id,'_gsgallery',$new_data);
 	} elseif (!is_null($new_data)) {
-		add_post_meta($post_id,'_martygallery',$new_data,TRUE);
+		add_post_meta($post_id,'_gsgallery',$new_data,TRUE);
 	}
 
 	return $post_id;
 }
 
-function my_meta_clean(&$arr)
+function gs_meta_clean(&$arr)
 {
 	if (is_array($arr))
 	{
@@ -122,7 +156,7 @@ function my_meta_clean(&$arr)
 		{
 			if (is_array($arr[$i])) 
 			{
-				my_meta_clean($arr[$i]);
+				gs_meta_clean($arr[$i]);
 
 				if (!count($arr[$i])) 
 				{
@@ -150,28 +184,25 @@ function my_meta_clean(&$arr)
 // Custom Galley
 // http://www.wpoutfitters.com/2011/01/wordpress-image-attachment-gallery-revisited/
 
-function marty_get_images($post_id, $description) {
+function gs_get_images($post_id, $description) {
 	global $post;
 
 	$images = get_children( array('post_parent' => $post_id, 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => 'ASC', 'orderby' => 'menu_order ID') );
 
 	if ($images) :
 
-		$martygallery = get_post_meta($post_id, '_martygallery', true);
-	
-		// Setup transition style
-		if ( !empty( $martygallery['transition'] ) ) {
-			$transition = $martygallery['transition'];
+		$gsgallery = get_post_meta($post_id, '_gsgallery', true);
+
+		// Setup options
+		if ( empty($gsgallery['thumbs']) || $gsgallery['thumbs'] == 'on' ) $thumboption = ' hasthumbs';
+		if ( $gsgallery['next'] == 'on' ) $nextoption = ' hasnext'; 	
+
+
+		if ( $gsgallery['mode'] == 'automatic' ) {
+			echo '<div class="gallery-fade automatic">';		
 		} else {
-			$transition = 'fade';
+			echo '<div class="gallery-fade controls' . $thumboption . $nextoption . '">';			
 		}
-
-		$wrapper = 'gallery-' . $transition;
-
-		// Setup thumbnails
-		if ( empty($martygallery['thumbs']) || $martygallery['thumbs'] == 'on' ) $thumboption = ' hasthumbs';
-
-		echo '<div class="' . $wrapper . $thumboption . '">';
 
 		foreach ($images as $attachment_id => $image) :
 	
@@ -192,16 +223,18 @@ function marty_get_images($post_id, $description) {
 			?>
 
 			<div class="slide">
-				<div class="image">
-					<p><img src="<?php echo $img_url; ?>" alt="<?php echo $img_alt; ?>" title="<?php echo $img_title; ?>" width="<?php echo $img_width; ?>" height="<?php echo $img_height; ?>" /></p>
-				</div>
+				<div class="slideinner" style="width: <?php echo $img_width; ?>px">
+					<div class="image" >
+						<p><img src="<?php echo $img_url; ?>" alt="<?php echo $img_alt; ?>" title="<?php echo $img_title; ?>" width="<?php echo $img_width; ?>" height="<?php echo $img_height; ?>" /></p>
+					</div>
 
-				<?php if ($description == true ) { ?>
-				<div  class="description" style="width: <?php echo $img_width; ?>px">
-					<?php if ($img_description) : echo wpautop($img_description); endif; ?>
-				</div>
-				<?php } ?>
+					<?php if ($description == true ) { ?>
+					<div  class="description">
+						<?php if ($img_description) : echo wpautop($img_description); endif; ?>
+					</div>
+					<?php } ?>
 
+				</div>
 			</div>
 
 		<?php endforeach; ?>
@@ -233,12 +266,43 @@ function marty_get_images($post_id, $description) {
 
 		<?php endif;?>
 
+		<?php if ( $nextoption == ' hasnext' ) : ?>
+				<?php 
+				
+				$posttype = get_post_type( $post_id );
+			
+			
+			if ( $posttype == "post" ) {
+				// Post type: post";				
+
+			} else if ( $posttype == "page") {
+				// Post type: page";
+
+				$pagelist = get_pages('sort_column=menu_order&sort_order=asc');
+				$pages = array();
+				foreach ($pagelist as $page) {
+				   $pages[] += $page->ID;
+				}
+
+				$current = array_search($post_id, $pages);
+				$nextID = $pages[$current+1];
+
+			} else {
+				// Error: Unknown post type";
+
+			}
+			
+			?>
+
+			<a id="nextgallery" href="<?php echo get_permalink($nextID); ?>">Next Gallery &rarr;</a>
+			
+
+		<?php endif;?>
+
 	<?php endif;
 
 } 
 // End
-
-
 
 
 ?>

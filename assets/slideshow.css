@@ -2,8 +2,7 @@
 
 .gallerycontent { margin-left: 3em;}
 
-#gallerywrapper {width: 981px; overflow: hidden; margin: auto;}
-#gallerywrapper .slide {width: 981px; float: left; overflow: hidden;}
+#gallerywrapper {overflow: hidden; margin: auto; position: relative;}
 
 #scrollwrapper { overflow: auto; padding: 0 0 0 3em;}
 #scrollwrapper .slide {padding-right: 3em; float: left; overflow: hidden;}
@@ -13,10 +12,13 @@
 #slidecontrols a { cursor: pointer; color: #666;}
 #slidecontrols a.inactive {color: #ccc;}
 
+.slide {position: absolute; top: 0; overflow: hidden; width: 100%; }
+.slideinner {margin: auto; position: relative;}
 
 .image {margin: auto;}
 .image p {margin: 0; text-align: center;}
 .description {margin: auto;}
 
-.thumbnails {width: 870px; margin: auto; overflow: hidden; display: none;}
-.thumbnails .thumb {float: left; margin: 1em; cursor: pointer; }
+.cursornext, .cursorprev { display: block; width: 33%; position: absolute; top: 0; }
+.cursornext {right: 0}
+.cursorprev {left: 0}
