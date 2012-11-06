@@ -19,6 +19,7 @@
 .image p {margin: 0; text-align: center;}
 .description {margin: auto;}
 
+.dragmask {position: absolute; top: 0; width: 100%;}
 .cursornext, .cursorprev { display: block; width: 33%; position: absolute; top: 0; }
 .cursornext {right: 0}
 .cursorprev {left: 0}

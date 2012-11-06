@@ -23,6 +23,7 @@ $(document).ready(function() {
 
 		$('.image').each(function(index) {
 			var imageheight = $(this).outerHeight();
+			$(this).find('.dragmask').height(imageheight);
 			$(this).find('.cursorprev').height(imageheight);
 			$(this).find('.cursornext').height(imageheight);
 		});
@@ -63,12 +64,13 @@ $(document).ready(function() {
 		$('#nextgallery').hide();		
 
 		$(this).find('.slide').each(function(index) {
+			$(this).find('.image').prepend('<div class="dragmask"><a class="cursornext"></a></div');
+			
 			if ( $(this).is(':not(:first-child)') ) {
-				$(this).find('.image').prepend('<a class="cursorprev"></a>');
+				$(this).find('.image .dragmask').prepend('<a class="cursorprev"></a>');
 			}
-			//if ( $(this).is(':not(:last-child)') ) {
-				$(this).find('.image').prepend('<a class="cursornext"></a>');				
-			//}
+				
+
 		});
 
 	}
@@ -77,7 +79,7 @@ $(document).ready(function() {
 	// Set Up Controls
 	jQuery.fn.setupAutomatic = function() {
 		$(this).wrap('<div id="gallerywrapper" />');
-		
+		cursornext
 		$('#nextgallery').hide();		
 
 	}

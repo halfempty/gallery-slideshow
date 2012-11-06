@@ -62,7 +62,7 @@ function gs_meta_setup() {
 		$transition = 'fade';		
 	}
 
-	echo '<p><select id="gsgallery_mode" name="_gsgallery[mode]">';
+	echo '<p><strong>Mode</strong></p><p><select id="gsgallery_mode" name="_gsgallery[mode]">';
 
 	echo '<option value="normal" ';
 		if( $meta['mode'] == 'normal' || !$meta['mode'] || $meta['mode'] == '' ) echo 'selected="selected"';
@@ -76,23 +76,10 @@ function gs_meta_setup() {
 
 
 
-/*
-	echo '<p>Transition: &nbsp; ';
-
-	echo '<input type="radio" name="_gsgallery[transition]" value="fade" ';
-	if ( $transition == 'fade' ) echo 'checked="checked"';
-	echo ' /> Fade &nbsp; ';
-
-	echo '<input type="radio" name="_gsgallery[transition]" value="slide" ';
-	if( $transition == 'slide' ) echo 'checked="checked"';
-	echo ' /> Slide &nbsp; ';
-*/
-
-
 
 	$metathumbs = get_post_meta($post->ID,'_gsgallery[thumbs]',TRUE);
 
-	echo '<div class="gsgallery_thumbnails"><p>Thumbnails: &nbsp; ';
+	echo '<p><strong>Options</strong></p> <p>Thumbnails: &nbsp; ';
 
 	echo '<input type="radio" name="_gsgallery[thumbs]" value="on" ';
 	if( $meta[thumbs] !== 'off' ) echo 'checked="checked"';
@@ -100,10 +87,12 @@ function gs_meta_setup() {
 
 	echo '<input type="radio" name="_gsgallery[thumbs]" value="off" ';
 	if( $meta[thumbs] == 'off' ) echo 'checked="checked"';
-	echo ' /> Off &nbsp; </p></div>';
+	echo ' /> Off &nbsp; </p>';
 
 
-
+	echo '<label for="gsgallery_hidecaption"><input type="checkbox" id="gsgallery_hidecaption" name="_gsgallery[hidecaption]" value="yes"';
+		if( $meta['hidecaption'] == true ) echo 'checked="checked"';	
+	echo '> Hide image captions</label>';
 
 
 /*
@@ -184,7 +173,7 @@ function gs_meta_clean(&$arr)
 // Custom Galley
 // http://www.wpoutfitters.com/2011/01/wordpress-image-attachment-gallery-revisited/
 
-function gs_get_images($post_id, $description) {
+function gs_get_images($post_id) {
 	global $post;
 
 	$images = get_children( array('post_parent' => $post_id, 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => 'ASC', 'orderby' => 'menu_order ID') );
@@ -192,6 +181,8 @@ function gs_get_images($post_id, $description) {
 	if ($images) :
 
 		$gsgallery = get_post_meta($post_id, '_gsgallery', true);
+
+		$hidecaption = $gsgallery['hidecaption'];
 
 		// Setup options
 		if ( empty($gsgallery['thumbs']) || $gsgallery['thumbs'] == 'on' ) $thumboption = ' hasthumbs';
@@ -228,7 +219,7 @@ function gs_get_images($post_id, $description) {
 						<p><img src="<?php echo $img_url; ?>" alt="<?php echo $img_alt; ?>" title="<?php echo $img_title; ?>" width="<?php echo $img_width; ?>" height="<?php echo $img_height; ?>" /></p>
 					</div>
 
-					<?php if ($description == true ) { ?>
+					<?php if ($hidecaption != true ) { ?>
 					<div  class="description">
 						<?php if ($img_description) : echo wpautop($img_description); endif; ?>
 					</div>
