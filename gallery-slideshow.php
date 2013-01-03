@@ -94,6 +94,9 @@ function gs_meta_setup() {
 		if( $meta['hidecaption'] == true ) echo 'checked="checked"';	
 	echo '> Hide image captions</label>';
 
+	echo '<div class="gsgallery_hidefeatured"><label for="gsgallery_hidefeatured"><input type="checkbox" id="gsgallery_hidefeatured" name="_gsgallery[hidefeatured]" value="yes"';
+		if( $meta['hidefeatured'] == true ) echo 'checked="checked"';	
+	echo '> Exclude Featured Image</label></div>';
 
 /*
 	echo ' &nbsp; &nbsp;  Next gallery after last slide: &nbsp; ';
@@ -183,6 +186,17 @@ function gs_get_images($post_id) {
 		$gsgallery = get_post_meta($post_id, '_gsgallery', true);
 
 		$hidecaption = $gsgallery['hidecaption'];
+
+		$hidefeatured = $gsgallery['hidefeatured'];
+
+		if ( $hidefeatured  == true ) {
+
+			$thumbnail_ID = get_post_thumbnail_id();
+
+			unset( $images[$thumbnail_ID] );
+
+		}
+
 
 		// Setup options
 		if ( empty($gsgallery['thumbs']) || $gsgallery['thumbs'] == 'on' ) $thumboption = ' hasthumbs';

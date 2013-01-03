@@ -1,7 +1,5 @@
 /* Slideshow */
 
-.gallerycontent { margin-left: 3em;}
-
 #gallerywrapper {overflow: hidden; margin: auto; position: relative;}
 
 #scrollwrapper { overflow: auto; padding: 0 0 0 3em;}
