@@ -110,12 +110,12 @@ $(document).ready(function() {
 				next = $('#slidecontrols .next');
 				prev = $('#slidecontrols .prev');
 
-				$(gallery + '.slide:eq('+oldSlide+') img').fadeOut('medium', function() {
-				    $(gallery + '.slide:eq('+oldSlide+')').css('display','none');		
+				$(gallery).find('.slide').eq(oldSlide).find('img').fadeOut('medium', function() {
+				    $(gallery).find('.slide').eq(oldSlide).css('display','none');		
 				});
 
-			    $(gallery + '.slide:eq('+nextPosition+')').css('display','block');
-				$(gallery + '.slide:eq('+nextPosition+') img').fadeIn('medium');
+			    $(gallery).find('.slide').eq(nextPosition).css('display','block');
+				$(gallery).find('.slide').eq(nextPosition).find('img').fadeIn('medium');
 
 
 

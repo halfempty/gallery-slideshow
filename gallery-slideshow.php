@@ -235,6 +235,7 @@ function gs_get_images($post_id) {
 
 					<?php if ($hidecaption != true ) { ?>
 					<div  class="description">
+						<?php if ($img_caption) : echo wpautop($img_caption); endif; ?>
 						<?php if ($img_description) : echo wpautop($img_description); endif; ?>
 					</div>
 					<?php } ?>
