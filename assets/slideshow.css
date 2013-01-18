@@ -18,6 +18,6 @@
 .description {margin: auto;}
 
 .dragmask {position: absolute; top: 0; width: 100%;}
-.cursornext, .cursorprev { display: block; width: 33%; position: absolute; top: 0; }
-.cursornext {right: 0}
-.cursorprev {left: 0}
+
+.cursornext { display: block; width: 33%; position: absolute; top: 0; right: 0; cursor: url("images/cursor-next.cur"), pointer;}
+.cursorprev { display: block; width: 33%; position: absolute; top: 0; left: 0; cursor: url("images/cursor-prev.cur"), pointer;}

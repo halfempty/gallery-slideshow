@@ -167,6 +167,7 @@ $(document).ready(function() {
 		$(this).find('.slide').hide();
 		$(this).find('img').hide();
 		
+
 		manageGallery(0);
 
 		$(window).load(function(){
@@ -218,7 +219,7 @@ $(document).ready(function() {
 		
 
 		// Keyboard action
-        function domo(){
+        function domo() {
 			jQuery(document).bind('keydown', 'right',function (evt){
 				var nextPosition = currentSlideGlobal+1;
 				manageGallery(nextPosition);

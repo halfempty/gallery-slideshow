@@ -249,7 +249,7 @@ function gs_get_images($post_id) {
 
 		<?php if ( $thumboption == ' hasthumbs' ) : ?>
 
-			<div class="thumbnails">
+			<div class="thumbnails" style="display: none;">
 
 				<?php 
 
