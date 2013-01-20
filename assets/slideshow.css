@@ -7,7 +7,7 @@
 #scrollwrapper .gallerycontent {overflow: hidden; clear: both; text-align: left; margin-left: 0;}
 
 #slidecontrols { -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -o-user-select: none; user-select: none; text-align: center;}
-#slidecontrols a { cursor: pointer; color: #666;}
+#slidecontrols a { cursor: pointer; }
 #slidecontrols a.inactive {color: #ccc;}
 
 .slide {position: absolute; top: 0; overflow: hidden; width: 100%; }

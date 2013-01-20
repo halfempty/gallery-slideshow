@@ -49,14 +49,14 @@ $(document).ready(function() {
 		$(this).wrap('<div id="gallerywrapper" />');
 		
 		var theControls = '<p id="slidecontrols">'
-		theControls += '<a title="Previous" class="prev"><span>&larr; Previous</span></a> &nbsp; ';
+		theControls += '<a title="Previous" class="prev"><span>&larr;<span class="label"> Previous</span></span></a> &nbsp; ';
 
 
 		if ( this.hasClass('hasthumbs') ) {
-		 	theControls += '<a title="Thumbnails" class="thumbs"><span>Thumbnails</span></a> &nbsp; '; 
+		 	theControls += '<a title="Thumbnails" class="thumbs"><span class="label">Thumbnails</span></a> &nbsp; '; 
 		}
 
-		theControls += '<a title="Next" class="next"><span>Next &rarr;</span></a>';
+		theControls += '<a title="Next" class="next"><span><span class="label">Next </span>&rarr;</span></a>';
 		theControls += '</p>';
 		
 		$(this).parent().after(theControls);		
@@ -110,14 +110,16 @@ $(document).ready(function() {
 				next = $('#slidecontrols .next');
 				prev = $('#slidecontrols .prev');
 
-				$(gallery).find('.slide').eq(oldSlide).find('img').fadeOut('medium', function() {
-				    $(gallery).find('.slide').eq(oldSlide).css('display','none');		
-				});
+				if ( nextPosition != oldSlide ) {
+
+					$(gallery).find('.slide').eq(oldSlide).find('img').fadeOut('medium', function() {
+					    $(gallery).find('.slide').eq(oldSlide).css('display','none');		
+					});
+				
+				}
 
 			    $(gallery).find('.slide').eq(nextPosition).css('display','block');
 				$(gallery).find('.slide').eq(nextPosition).find('img').fadeIn('medium');
-
-
 
 				nextPosition == maxPosition ? $(next).addClass('inactive') : $(next).removeClass('inactive');	
 				nextPosition == 0 ? $(prev).addClass('inactive') : $(prev).removeClass('inactive');
@@ -140,23 +142,21 @@ $(document).ready(function() {
 
 				if ( nextPosition > maxPosition ) {
  					// We were on last slide
-					// console.log('last slide');				
 
-					if ( gallery.hasClass('hasnext') ) {
+					nextPosition = 0;
+
+/*					if ( gallery.hasClass('hasnext') ) {
 						thehref = $('#nextgallery').attr('href');
-						// console.log('has next gallery: ' + thehref);
 						document.location.href=thehref;
-					} else {
-						nextPosition = 0;						
-					}
+					} else { 
+
+					} */
 
 
 				}
 
 				currentSlideGlobal = nextPosition;
-
 				performChange(gallery, oldSlide)
-
 				
 			}
 
@@ -171,9 +171,7 @@ $(document).ready(function() {
 		manageGallery(0);
 
 		$(window).load(function(){
-			// console.log('ready 2');
 			if ( $('.gallery-fade').hasClass('automatic') ) {
-				// console.log('hasclass');
 				animator();
 			}
 
