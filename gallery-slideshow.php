@@ -45,9 +45,11 @@ function gs_meta_init() {
 	foreach (array('post','page') as $type) {
 		add_meta_box('gs_all_meta', 'Gallery Slideshow', 'gs_meta_setup', $type, 'side', 'default');
 	}
-	
+
 	add_action('save_post','gs_meta_save');
 }
+
+
 
 function gs_meta_setup() {
 	global $post;
@@ -98,20 +100,6 @@ function gs_meta_setup() {
 		if( $meta['hidefeatured'] == true ) echo 'checked="checked"';	
 	echo '> Exclude Featured Image</label></div>';
 
-/*
-	echo ' &nbsp; &nbsp;  Next gallery after last slide: &nbsp; ';
-
-	echo '<input type="radio" name="_gsgallery[next]" value="on" ';
-	if( $meta[next] == 'on' ) echo 'checked="checked"';
-	echo ' /> On &nbsp; ';
-
-	echo '<input type="radio" name="_gsgallery[next]" value="off" ';
-	if( $meta[next] !== 'on' ) echo 'checked="checked"';
-	echo ' /> Off &nbsp; ';
-
-
-	echo '</p>';
- */
 	// create a custom nonce for submit verification later
 	echo '<input type="hidden" name="gs_meta_noncename" value="' . wp_create_nonce(__FILE__) . '" />';
 }
@@ -171,6 +159,50 @@ function gs_meta_clean(&$arr)
 	}
 }
 
+
+
+// Attachmnet Options
+// http://net.tutsplus.com/tutorials/wordpress/creating-custom-fields-for-attachments-in-wordpress/
+
+function gs_slide_options($form_fields, $post) {
+
+	$slidetype = get_post_meta($post->ID, "_slidetype", true);
+
+	$form_fields["slidetype"]["label"] = __("Slide style: ");
+	$form_fields["slidetype"]["input"] = "html";
+	$select = "<select name='attachments[{$post->ID}][slidetype]' id='attachments[{$post->ID}][slidetype]'>";
+
+	$select .= "<option value='normal'";
+		if ( $slidetype != 'both' && $slidetype != 'text' ) $select .= ' selected="selected"';
+		$select .= ">Image</option>";
+
+	$select .= "<option value='both'";
+		if ( $slidetype == 'both' ) $select .= ' selected="selected"';
+		$select .= ">Image &amp; Description</option>";
+
+	$select .= "<option value='text'";
+		if ( $slidetype == 'text' ) $select .= ' selected="selected"';
+		$select .= ">Description Only</option>";
+	
+	$select .= "</select>";
+
+	$form_fields["slidetype"]["html"] = $select;
+
+	return $form_fields;
+
+}
+
+add_filter("attachment_fields_to_edit", "gs_slide_options", null, 2);
+
+
+function gs_slide_options_save($post, $attachment) {  
+    if( isset($attachment['slidetype']) ){  
+        update_post_meta($post['ID'], '_slidetype', $attachment['slidetype']);  
+    }  
+    return $post;  
+}
+
+add_filter("attachment_fields_to_save", "gs_slide_options_save", null, 2);
 
 
 // Custom Galley
