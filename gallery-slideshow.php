@@ -243,6 +243,7 @@ function gs_get_images($post_id) {
 
 		foreach ($images as $attachment_id => $image) :
 	
+			$slidetype = get_post_meta($attachment_id, '_slidetype', true);
 
 			$img_title = $image->post_title;   // title.
 			$img_caption = $image->post_excerpt; // caption.
@@ -256,24 +257,52 @@ function gs_get_images($post_id) {
 			$img_width = $big_array[1];
 			$img_height = $big_array[2];
 			
-			
 			?>
 
-			<div class="slide">
-				<div class="slideinner" style="width: <?php echo $img_width; ?>px">
-					<div class="image" >
-						<p><img src="<?php echo $img_url; ?>" alt="<?php echo $img_alt; ?>" title="<?php echo $img_title; ?>" width="<?php echo $img_width; ?>" height="<?php echo $img_height; ?>" /></p>
+			<?php if ($slidetype == 'text' && $img_description) : ?>
+				<div class="slide textslide" style="width: <?php echo get_option( 'large_size_w' ); ?>px">
+					<div class="longdescription">
+						<?php echo wpautop($img_description); ?>
+					</div>
+				</div>
+			<?php elseif ($slidetype == 'both' && $img_description ) : ?>
+				<div class="slide spreadslide" style="width: <?php echo get_option( 'large_size_w' ); ?>px">
+
+					<div class="imagewrap" style="width: <?php echo $img_width; ?>px">
+						<div class="image" >
+							<p><img src="<?php echo $img_url; ?>" alt="<?php echo $img_alt; ?>" title="<?php echo $img_title; ?>" width="<?php echo $img_width; ?>" height="<?php echo $img_height; ?>" /></p>
+						</div>
+
+						<?php if ($hidecaption != true ) : ?>
+							<div class="description">
+								<?php if ($img_caption) : echo wpautop($img_caption); endif; ?>
+							</div>
+						<?php endif; ?>
 					</div>
 
-					<?php if ($hidecaption != true ) { ?>
-					<div  class="description">
-						<?php if ($img_caption) : echo wpautop($img_caption); endif; ?>
-						<?php if ($img_description) : echo wpautop($img_description); endif; ?>
+					<?php echo wpautop($img_description); ?>
+
+			</div>
+			<?php else: ?>
+				<div class="slide imageslide" style="width: <?php echo get_option( 'large_size_w' ); ?>px">
+
+					<div class="imagewrap" style="width: <?php echo $img_width; ?>px; margin: auto;">
+						<div class="image" >
+							<p><img src="<?php echo $img_url; ?>" alt="<?php echo $img_alt; ?>" title="<?php echo $img_title; ?>" width="<?php echo $img_width; ?>" height="<?php echo $img_height; ?>" /></p>
+						</div>
+
+						<?php if ($img_caption || $img_description && $hidecaption != true ) { ?>
+							<div class="description">
+								<?php if ($img_caption) : echo wpautop($img_caption); endif; ?>
+								<?php if ($img_description) : echo wpautop($img_description); endif; ?>
+							</div>
+						<?php } ?>
 					</div>
-					<?php } ?>
 
 				</div>
-			</div>
+
+			<?php endif; ?>
+
 
 		<?php endforeach; ?>
 

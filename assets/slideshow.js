@@ -8,13 +8,25 @@ $(document).ready(function() {
 		var galleryheight = 0;
 
 		$('.slide').each(function(index) {
-			var slideheight = $(this).outerHeight();
+			var imagewrap_height = $(this).find('.imagewrap').outerHeight();
+			var longdesc_height = $(this).find('.longdescription').outerHeight();
+
+			// This here is to accomodate slides where the description
+			// floats beside the image. The CSS float doesn't kick in until
+			// too late which causes the slideheight to be too tall, if measured
+			// directly. Not a perfect solution, as it's assumed these elements
+			// are floated and not stacked.
+			
+			if ( imagewrap_height > longdesc_height ) {
+				var slideheight = imagewrap_height;
+			} else {
+				var slideheight = longdesc_height;
+			}
 
 			if ( slideheight > galleryheight ) {
 				galleryheight = slideheight;
-
 			}
-
+			
 		});
 
 		$(this).height(galleryheight);
@@ -32,15 +44,31 @@ $(document).ready(function() {
 
 
 	jQuery.fn.setWidth = function() {
+
 		var gallerywidth = 0;
 
 		$('.slide').each(function(index) {
-			var imagewidth = $(this).outerWidth();
-			if ( imagewidth > gallerywidth ) gallerywidth = imagewidth;
+			if ( $(this).hasClass('spreadslide') ) {
+				
+				var imagewrap_width = $(this).find('img').outerWidth();
+				var longdesc_width = $(this).find('.longdescription').outerWidth();		
+				var slidewidth = imagewrap_width + longdesc_width;
+
+			} else if ( $(this).hasClass('textslide') ) {
+
+				var slidewidth = $(this).find('.longdescription').outerWidth();	;
+
+			} else {
+				var slidewidth = $(this).find('img').outerWidth();
+
+			}
+
+			if ( slidewidth > gallerywidth ) gallerywidth = slidewidth;
 		});
 
 		if (gallerywidth !== 0 ) $('#gallerywrapper').width(gallerywidth);
 
+		
 	}
 
 
@@ -115,10 +143,13 @@ $(document).ready(function() {
 					$(gallery).find('.slide').eq(oldSlide).find('img').fadeOut('medium', function() {
 					    $(gallery).find('.slide').eq(oldSlide).css('display','none');		
 					});
+
+					$(gallery).find('.slide').eq(oldSlide).find('.description').fadeOut('medium', function() {});
+					$(gallery).find('.slide').eq(oldSlide).fadeOut('medium', function() {});
 				
 				}
 
-			    $(gallery).find('.slide').eq(nextPosition).css('display','block');
+			    $(gallery).find('.slide').eq(nextPosition).fadeIn('medium');
 				$(gallery).find('.slide').eq(nextPosition).find('img').fadeIn('medium');
 
 				nextPosition == maxPosition ? $(next).addClass('inactive') : $(next).removeClass('inactive');	
@@ -126,7 +157,7 @@ $(document).ready(function() {
 				
 			}
 			
-			$('.image').each(function() {
+			$('.imagewrap').each(function() {
 				var imagewidth = $(this).find('img').outerWidth();
 				$(this).width(imagewidth);
 			});
@@ -144,14 +175,6 @@ $(document).ready(function() {
  					// We were on last slide
 
 					nextPosition = 0;
-
-/*					if ( gallery.hasClass('hasnext') ) {
-						thehref = $('#nextgallery').attr('href');
-						document.location.href=thehref;
-					} else { 
-
-					} */
-
 
 				}
 
@@ -194,6 +217,7 @@ $(document).ready(function() {
 				$('#slidecontrols').fadeOut('fast');
 				$('#gallerywrapper').fadeOut('fast', function() {
 				    // Animation complete.
+					$('.slide').hide();
 					$('.thumbnails').fadeIn();
 				  });
 

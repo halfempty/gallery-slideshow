@@ -11,8 +11,11 @@
 #slidecontrols a.inactive {color: #ccc;}
 
 .slide {position: absolute; top: 0; overflow: hidden; width: 100%; }
-.slideinner {margin: auto; position: relative;}
+.slideinner {margin: auto; position: relative; overflow: hidden;}
 
+.longdescription {overflow: hidden;}
+
+.imagewrap {position: relative;}
 .image {margin: auto;}
 .image p {margin: 0; text-align: center;}
 .description {margin: auto;}
