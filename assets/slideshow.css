@@ -1,12 +1,12 @@
 /* Slideshow */
 
-#gallerywrapper {overflow: hidden; margin: auto; position: relative;}
+#gallerywrapper {overflow: hidden; position: relative;}
 
 #scrollwrapper { overflow: auto; padding: 0 0 0 3em;}
 #scrollwrapper .slide {padding-right: 3em; float: left; overflow: hidden;}
 #scrollwrapper .gallerycontent {overflow: hidden; clear: both; text-align: left; margin-left: 0;}
 
-#slidecontrols { -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -o-user-select: none; user-select: none; text-align: center;}
+#slidecontrols { -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -o-user-select: none; user-select: none; }
 #slidecontrols a { cursor: pointer; }
 #slidecontrols a.inactive {color: #ccc;}
 

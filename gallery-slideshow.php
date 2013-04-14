@@ -286,7 +286,7 @@ function gs_get_images($post_id) {
 			<?php else: ?>
 				<div class="slide imageslide" style="width: <?php echo get_option( 'large_size_w' ); ?>px">
 
-					<div class="imagewrap" style="width: <?php echo $img_width; ?>px; margin: auto;">
+					<div class="imagewrap" style="width: <?php echo $img_width; ?>px;">
 						<div class="image" >
 							<p><img src="<?php echo $img_url; ?>" alt="<?php echo $img_alt; ?>" title="<?php echo $img_title; ?>" width="<?php echo $img_width; ?>" height="<?php echo $img_height; ?>" /></p>
 						</div>

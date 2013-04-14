@@ -48,21 +48,7 @@ $(document).ready(function() {
 		var gallerywidth = 0;
 
 		$('.slide').each(function(index) {
-			if ( $(this).hasClass('spreadslide') ) {
-				
-				var imagewrap_width = $(this).find('img').outerWidth();
-				var longdesc_width = $(this).find('.longdescription').outerWidth();		
-				var slidewidth = imagewrap_width + longdesc_width;
-
-			} else if ( $(this).hasClass('textslide') ) {
-
-				var slidewidth = $(this).find('.longdescription').outerWidth();	;
-
-			} else {
-				var slidewidth = $(this).find('img').outerWidth();
-
-			}
-
+			var slidewidth = $(this).outerWidth();
 			if ( slidewidth > gallerywidth ) gallerywidth = slidewidth;
 		});
 
@@ -151,6 +137,7 @@ $(document).ready(function() {
 
 			    $(gallery).find('.slide').eq(nextPosition).fadeIn('medium');
 				$(gallery).find('.slide').eq(nextPosition).find('img').fadeIn('medium');
+				$(gallery).find('.slide').eq(nextPosition).find('.description').fadeIn('medium');
 
 				nextPosition == maxPosition ? $(next).addClass('inactive') : $(next).removeClass('inactive');	
 				nextPosition == 0 ? $(prev).addClass('inactive') : $(prev).removeClass('inactive');
