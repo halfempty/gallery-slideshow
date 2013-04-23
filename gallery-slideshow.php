@@ -1,9 +1,14 @@
 <?php
 /*
 Plugin Name: Gallery Slideshow
-Version: September 15 2012
 Author: Marty Spellerberg
 */
+
+
+// Plugin Options 
+
+require_once( dirname(__FILE__) . '/options.php' );
+
 
 function gs_gallery_scripts_method() {
 
@@ -208,8 +213,30 @@ add_filter("attachment_fields_to_save", "gs_slide_options_save", null, 2);
 // Custom Galley
 // http://www.wpoutfitters.com/2011/01/wordpress-image-attachment-gallery-revisited/
 
-function gs_get_images($post_id) {
+function gs_get_images($post_id) { 
+	
+	
+	 $options = get_option( 'gallery_slideshow_options' ); 
+	
+	if( $options['cursor'] != 'styleb' ) :
+		$next = plugins_url( 'assets/images/cursor-a-next.png' , __FILE__ );
+		$prev = plugins_url( 'assets/images/cursor-a-prev.png' , __FILE__ );
+	else :
+		$next = plugins_url( 'assets/images/cursor-b-next.png' , __FILE__ );
+		$prev = plugins_url( 'assets/images/cursor-b-prev.png' , __FILE__ );
+	endif;
+	
+	?>
+
+<style>
+	.cursornext { cursor: url("<?php echo $next; ?>"), pointer;}
+	.cursorprev { cursor: url("<?php echo $prev; ?>"), pointer;}
+</style>
+
+<?php 
+
 	global $post;
+
 
 	$images = get_children( array('post_parent' => $post_id, 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => 'ASC', 'orderby' => 'menu_order ID') );
 
