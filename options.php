@@ -48,6 +48,7 @@ function gallery_slideshow_options() {
 
 $stylea = plugins_url( 'assets/images/cursor-a-next.png' , __FILE__ );
 $styleb = plugins_url( 'assets/images/cursor-b-next.png' , __FILE__ );
+$stylec = plugins_url( 'assets/images/cursor-c-next.png' , __FILE__ );
 
 
 ?>
@@ -55,7 +56,7 @@ $styleb = plugins_url( 'assets/images/cursor-b-next.png' , __FILE__ );
 <table style="background: #999; padding: .5em 1em;">
 <tr>
 <td><input id="gallery_slideshow_cursor_a" name="gallery_slideshow_options[cursor]" type="radio" value="stylea" <?php
-if( $options['cursor'] != 'styleb' ) echo 'checked="checked"';	
+if( $options['cursor'] != 'styleb' && $options['cursor'] != 'stylec' ) echo 'checked="checked"';	
 ?> /></td>
 <td><label class="description" for="gallery_slideshow_cursor_a"> <img src="<?php echo $stylea; ?>" alt="Style A" /></label></td>
 </tr>
@@ -65,6 +66,13 @@ if( $options['cursor'] == 'styleb' ) echo 'checked="checked"';
 ?> /></td>
 <td><label class="description" for="gallery_slideshow_cursor_b">  <img src="<?php echo $styleb; ?>" alt="Style B" /></label></td>
 </tr>
+<tr>
+<td><input id="gallery_slideshow_cursor_c" name="gallery_slideshow_options[cursor]" type="radio" value="stylec" <?php
+if( $options['cursor'] == 'stylec' ) echo 'checked="checked"';	
+?> /></td>
+<td><label class="description" for="gallery_slideshow_cursor_c">  <img src="<?php echo $stylec; ?>" alt="Style C" /></label></td>
+</tr>
+
 </table>
 
 <p class="submit">

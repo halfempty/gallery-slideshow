@@ -218,12 +218,15 @@ function gs_get_images($post_id) {
 	
 	 $options = get_option( 'gallery_slideshow_options' ); 
 	
-	if( $options['cursor'] != 'styleb' ) :
-		$next = plugins_url( 'assets/images/cursor-a-next.png' , __FILE__ );
-		$prev = plugins_url( 'assets/images/cursor-a-prev.png' , __FILE__ );
-	else :
+	if( $options['cursor'] == 'styleb' ) :
 		$next = plugins_url( 'assets/images/cursor-b-next.png' , __FILE__ );
 		$prev = plugins_url( 'assets/images/cursor-b-prev.png' , __FILE__ );
+	elseif( $options['cursor'] == 'stylec' ) :
+		$next = plugins_url( 'assets/images/cursor-c-next.png' , __FILE__ );
+		$prev = plugins_url( 'assets/images/cursor-c-prev.png' , __FILE__ );
+	else :
+		$next = plugins_url( 'assets/images/cursor-a-next.png' , __FILE__ );
+		$prev = plugins_url( 'assets/images/cursor-a-prev.png' , __FILE__ );
 	endif;
 	
 	?>
