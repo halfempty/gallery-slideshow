@@ -228,7 +228,13 @@ function gs_get_images($post_id) {
 		$next = plugins_url( 'assets/images/cursor-a-next.png' , __FILE__ );
 		$prev = plugins_url( 'assets/images/cursor-a-prev.png' , __FILE__ );
 	endif;
-	
+
+
+	$clocation = '';
+	if( $options['clocation'] == 'inside' ) :
+		$clocation = ' innercontrols';
+	endif;
+
 	?>
 
 <style>
@@ -268,7 +274,7 @@ function gs_get_images($post_id) {
 		if ( $gsgallery['mode'] == 'automatic' ) {
 			echo '<div class="gallery-fade automatic">';		
 		} else {
-			echo '<div class="gallery-fade controls' . $thumboption . $nextoption . '">';			
+			echo '<div class="gallery-fade controls' . $thumboption . $nextoption . $clocation .'">';			
 		}
 
 		foreach ($images as $attachment_id => $image) :

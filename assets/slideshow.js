@@ -90,6 +90,43 @@ $(document).ready(function() {
 	}
 
 
+	// Set Up Inner Controls
+	jQuery.fn.setupInnerControls = function() {
+		$(this).wrap('<div id="gallerywrapper" />');
+		
+		var theControls = '<p id="slidecontrols">'
+		theControls += '<a title="Previous" class="prev"><span>&larr;<span class="label"> Previous</span></span></a> &nbsp; ';
+
+
+		if ( this.hasClass('hasthumbs') ) {
+		 	theControls += '<a title="Thumbnails" class="thumbs"><span class="label">Thumbnails</span></a> &nbsp; '; 
+		}
+
+		theControls += '<a title="Next" class="next"><span><span class="label">Next </span>&rarr;</span></a>';
+		theControls += '</p>';
+		
+//		$(this).parent().after(theControls);		
+		$(this).find('.imagewrap').each(function(index) {
+			$(this).append(theControls);
+		});
+
+		$('#nextgallery').hide();		
+
+		$(this).find('.slide').each(function(index) {
+			$(this).find('.image').prepend('<div class="dragmask"><a class="cursornext"></a></div');
+			
+			if ( $(this).is(':not(:first-child)') ) {
+				$(this).find('.image .dragmask').prepend('<a class="cursorprev"></a>');
+			}
+				
+
+		});
+
+	}
+
+
+
+
 	// Set Up Controls
 	jQuery.fn.setupAutomatic = function() {
 		$(this).wrap('<div id="gallerywrapper" />');
@@ -265,6 +302,8 @@ $(document).ready(function() {
 
 	if ( theGallery.hasClass('automatic') ) {
 		theGallery.setupAutomatic();				
+	} else if ( theGallery.hasClass('innercontrols') ) {
+		theGallery.setupInnerControls();
 	} else {
 		theGallery.setupControls();						
 	}

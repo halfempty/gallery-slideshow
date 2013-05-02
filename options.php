@@ -75,6 +75,20 @@ if( $options['cursor'] == 'stylec' ) echo 'checked="checked"';
 
 </table>
 
+<h3>Controls Location</h3>
+<p>
+<input id="gallery_slideshow_clocation_outside" name="gallery_slideshow_options[clocation]" type="radio" value="outside" <?php
+if( $options['clocation'] != 'inside' ) echo 'checked="checked"';	
+?> />
+<label class="description" for="gallery_slideshow_clocation_outside"> <strong>Outside</strong> slide boundary</label>
+<br />
+
+<input id="gallery_slideshow_clocation_inside" name="gallery_slideshow_options[clocation]" type="radio" value="inside" <?php
+if( $options['clocation'] == 'inside' ) echo 'checked="checked"';	
+?> />
+<label class="description" for="gallery_slideshow_clocation_inside"> <strong>Inside</strong> slide boundary</label>
+</p>
+
 <p class="submit">
 	<input type="submit" class="button-primary" value="Save Options" />
 </p>
