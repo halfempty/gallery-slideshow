@@ -316,7 +316,9 @@ function gs_get_images($post_id) {
 						<?php endif; ?>
 					</div>
 
+					<div class="longdescription">
 					<?php echo wpautop($img_description); ?>
+					</div>
 
 			</div>
 			<?php else: ?>
