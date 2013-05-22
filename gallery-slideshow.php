@@ -42,9 +42,15 @@ add_action('admin_init','gs_meta_init');
 function gs_meta_init() {
 	// http://codex.wordpress.org/Function_Reference/add_meta_box
 
+	wp_enqueue_media();
+
 	$gsgalleryadminjs = plugins_url( '/gallery-slideshow.js' , __FILE__ );
 	wp_register_script('gsgalleryadminjs',$gsgalleryadminjs);
 	wp_enqueue_script( 'gsgalleryadminjs',array('jquery'));
+
+	$gsgalleryoptionsjs = plugins_url( '/gallery-slideshow-options.js' , __FILE__ );
+	wp_register_script('gsgalleryoptionsjs',$gsgalleryoptionsjs);
+	wp_enqueue_script( 'gsgalleryoptionsjs',array('jquery'));
 
 
 	foreach (array('post','page') as $type) {
@@ -352,7 +358,11 @@ function gs_get_images($post_id) {
 
 				<?php 
 
+				$options = get_option( 'gallery_slideshow_options' );
+
 				foreach ($images as $attachment_id => $image) :
+
+					$slidetype = get_post_meta($attachment_id, '_slidetype', true);
 
 					$thumb_title = $image->post_title;   // title.
 					$thumb_alt = get_post_meta($attachment_id, '_wp_attachment_image_alt', true); //alt
@@ -362,9 +372,14 @@ function gs_get_images($post_id) {
 	 				$thumb_url = $thumb_array[0];
 
 				?>
-
-					<div class="thumb"><img src="<?php echo $thumb_url; ?>" alt="<?php echo $img_alt; ?>" title="<?php echo $img_title; ?>" /></div>
-
+				<div class="thumb">
+					<?php if ($slidetype == 'text' && $options['textthumb'] ) : ?>
+						<?php echo wp_get_attachment_image( $options['textthumb'], 'thumbnail' ); ?>
+					<?php else : ?>
+						<img src="<?php echo $thumb_url; ?>" alt="<?php echo $img_alt; ?>" title="<?php echo $img_title; ?>" />
+					<?php endif; ?>
+				</div>
+				
 				<?php endforeach; ?>
 
 			</div>		

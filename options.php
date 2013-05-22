@@ -89,6 +89,31 @@ if( $options['clocation'] == 'inside' ) echo 'checked="checked"';
 <label class="description" for="gallery_slideshow_clocation_inside"> <strong>Inside</strong> slide boundary</label>
 </p>
 
+
+<h3>Thumbnail for text slides:</h3>
+
+
+<div class="trayuploader">
+
+	
+	<div id="traypreview">
+	<?php if ( !$options['textthumb'] ) : ?>
+
+		<img src="<?php echo plugins_url( '/preview.png' , __FILE__ ); ?>" />		
+		
+	<?php else: ?>
+
+ 		<?php echo wp_get_attachment_image( $options['textthumb'], 'thumbnail' ); ?>
+
+	<?php endif; ?>
+	</div>
+
+	<p><input type="button" class="button-secondary" name="gs_tray_button" id="gs_tray_button" value="Set thumbnail image" title="Thumbanil Image" /></p>
+
+	<input type="hidden" name="gallery_slideshow_options[textthumb]"  value="<?php echo $options['textthumb'] ?>" id="gs_features_tray" />
+</div>
+
+
 <p class="submit">
 	<input type="submit" class="button-primary" value="Save Options" />
 </p>
