@@ -130,9 +130,16 @@ $(document).ready(function() {
 	// Set Up Controls
 	jQuery.fn.setupAutomatic = function() {
 		$(this).wrap('<div id="gallerywrapper" />');
-		cursornext
+		//cursornext
 		$('#nextgallery').hide();		
 
+	}
+
+
+
+	// Set Up Single
+	jQuery.fn.setupSingle = function() {
+		$(this).wrap('<div id="gallerywrapper" />');
 	}
 
 
@@ -298,15 +305,24 @@ $(document).ready(function() {
 	}// end Fade Gallery
 
 
-	var theGallery = $('.slide:not(:only-child)').parent();
+	var theGallery = $('.slide').parent();
 
-	if ( theGallery.hasClass('automatic') ) {
-		theGallery.setupAutomatic();				
-	} else if ( theGallery.hasClass('innercontrols') ) {
-		theGallery.setupInnerControls();
+	if ( $('.slide').length > 1 ) {
+
+
+		if ( theGallery.hasClass('automatic') ) {
+			theGallery.setupAutomatic();
+		} else if ( theGallery.hasClass('innercontrols') ) {
+			theGallery.setupInnerControls();
+		} else {
+			theGallery.setupControls();						
+		}
+
 	} else {
-		theGallery.setupControls();						
-	}
+
+		theGallery.setupSingle();
+
+	}	
 
 	theGallery.setHeight();
 	theGallery.setWidth();
