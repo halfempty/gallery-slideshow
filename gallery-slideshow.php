@@ -6,8 +6,8 @@ Author: Marty Spellerberg
 
 
 // Plugin Options 
+require_once( dirname(__FILE__) . '/gallery-slideshow-options.php' );
 
-require_once( dirname(__FILE__) . '/options.php' );
 
 
 function gs_gallery_scripts_method() {
@@ -33,18 +33,26 @@ function gs_gallery_scripts_method() {
 add_action('wp_enqueue_scripts', 'gs_gallery_scripts_method');
 
 
-// Custom WordPress Meta Box
-// http://www.farinspace.com/how-to-create-custom-wordpress-meta-box/
-
 
 add_action('admin_init','gs_meta_init');
 
 function gs_meta_init() {
 	// http://codex.wordpress.org/Function_Reference/add_meta_box
 
+
+	global $pagenow;
+	if ( ($pagenow == 'options-general.php') && ($_GET['page'] == 'gallery-slideshow-options') ) {
+		wp_enqueue_media();
+	}
+
+
 	$gsgalleryadminjs = plugins_url( '/gallery-slideshow.js' , __FILE__ );
 	wp_register_script('gsgalleryadminjs',$gsgalleryadminjs);
 	wp_enqueue_script( 'gsgalleryadminjs',array('jquery'));
+
+	$gsgalleryoptionsjs = plugins_url( '/gallery-slideshow-options.js' , __FILE__ );
+	wp_register_script('gsgalleryoptionsjs',$gsgalleryoptionsjs);
+	wp_enqueue_script( 'gsgalleryoptionsjs',array('jquery'));
 
 
 	foreach (array('post','page') as $type) {
@@ -53,6 +61,7 @@ function gs_meta_init() {
 
 	add_action('save_post','gs_meta_save');
 }
+
 
 
 
@@ -81,9 +90,6 @@ function gs_meta_setup() {
 
 	echo '</select></p>';
 
-
-
-
 	$metathumbs = get_post_meta($post->ID,'_gsgallery[thumbs]',TRUE);
 
 	echo '<p><strong>Options</strong></p> <p>Thumbnails: &nbsp; ';
@@ -108,6 +114,8 @@ function gs_meta_setup() {
 	// create a custom nonce for submit verification later
 	echo '<input type="hidden" name="gs_meta_noncename" value="' . wp_create_nonce(__FILE__) . '" />';
 }
+
+
  
 function gs_meta_save($post_id) {
 	if (!wp_verify_nonce($_POST['gs_meta_noncename'],__FILE__)) return $post_id;
@@ -165,7 +173,6 @@ function gs_meta_clean(&$arr)
 }
 
 
-
 // Attachmnet Options
 // http://net.tutsplus.com/tutorials/wordpress/creating-custom-fields-for-attachments-in-wordpress/
 
@@ -200,6 +207,7 @@ function gs_slide_options($form_fields, $post) {
 add_filter("attachment_fields_to_edit", "gs_slide_options", null, 2);
 
 
+
 function gs_slide_options_save($post, $attachment) {  
     if( isset($attachment['slidetype']) ){  
         update_post_meta($post['ID'], '_slidetype', $attachment['slidetype']);  
@@ -208,6 +216,8 @@ function gs_slide_options_save($post, $attachment) {
 }
 
 add_filter("attachment_fields_to_save", "gs_slide_options_save", null, 2);
+
+
 
 
 // Custom Galley
@@ -352,7 +362,11 @@ function gs_get_images($post_id) {
 
 				<?php 
 
+				$options = get_option( 'gallery_slideshow_options' );
+
 				foreach ($images as $attachment_id => $image) :
+
+					$slidetype = get_post_meta($attachment_id, '_slidetype', true);
 
 					$thumb_title = $image->post_title;   // title.
 					$thumb_alt = get_post_meta($attachment_id, '_wp_attachment_image_alt', true); //alt
@@ -362,9 +376,14 @@ function gs_get_images($post_id) {
 	 				$thumb_url = $thumb_array[0];
 
 				?>
-
-					<div class="thumb"><img src="<?php echo $thumb_url; ?>" alt="<?php echo $img_alt; ?>" title="<?php echo $img_title; ?>" /></div>
-
+				<div class="thumb">
+					<?php if ($slidetype == 'text' && $options['textthumb'] ) : ?>
+						<?php echo wp_get_attachment_image( $options['textthumb'], 'thumbnail' ); ?>
+					<?php else : ?>
+						<img src="<?php echo $thumb_url; ?>" alt="<?php echo $img_alt; ?>" title="<?php echo $img_title; ?>" />
+					<?php endif; ?>
+				</div>
+				
 				<?php endforeach; ?>
 
 			</div>		
