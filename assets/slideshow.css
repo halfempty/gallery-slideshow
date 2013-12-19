@@ -24,3 +24,11 @@
 
 .cursornext { display: block; width: 33%; position: absolute; top: 0; right: 0;}
 .cursorprev { display: block; width: 33%; position: absolute; top: 0; left: 0;}
+
+
+/* Side Slider */
+
+
+#scrollwrapper { overflow: auto; }
+#scrollwrapper .column { float: left; overflow: hidden;}
+#scrollwrapper .gallerycontent {overflow: hidden; clear: both; text-align: left; margin-left: 0;}

@@ -28,6 +28,12 @@ function gs_gallery_scripts_method() {
 	wp_register_script('gsgalleryjs',$gsgalleryjs);
 	wp_enqueue_script( 'gsgalleryjs',array('jquery','jquery_hotkeys'));
 
+	// Side Scroller
+	$sidescrollerjs = plugins_url( '/assets/sidescroller.js' , __FILE__ );
+	wp_register_script('sidescrollerjs',$sidescrollerjs);
+	wp_enqueue_script( 'sidescrollerjs',array('jquery'));
+
+
 }
 
 add_action('wp_enqueue_scripts', 'gs_gallery_scripts_method');
@@ -87,6 +93,10 @@ function gs_meta_setup() {
 	echo '<option value="automatic" ';
 		if( $meta['mode'] == 'automatic' ) echo 'selected="selected"';
 	echo ' />Automatic</option>';
+
+	echo '<option value="sidescroller" ';
+		if( $meta['mode'] == 'sidescroller' ) echo 'selected="selected"';
+	echo ' />Side Scroller</option>';
 
 	echo '</select></p>';
 
@@ -224,7 +234,18 @@ add_filter("attachment_fields_to_save", "gs_slide_options_save", null, 2);
 // http://www.wpoutfitters.com/2011/01/wordpress-image-attachment-gallery-revisited/
 
 function gs_get_images($post_id) { 
-	
+
+	$gsgallery = get_post_meta($post_id, '_gsgallery', true);
+
+	if ( $gsgallery['mode'] == 'sidescroller' ) :
+		the_sidescoller($post_id);
+	else : 
+		the_galleryslideshow($post_id);
+	endif;
+
+}
+
+function the_galleryslideshow($post_id) { 	
 	
 	 $options = get_option( 'gallery_slideshow_options' ); 
 	
@@ -427,6 +448,61 @@ function gs_get_images($post_id) {
 
 } 
 // End
+
+
+
+function the_sidescoller($post_id) {
+
+	$gsgallery = get_post_meta($post_id, '_gsgallery', true);
+
+	$hidecaption = $gsgallery['hidecaption'];
+
+	global $post;
+
+	$images = get_children( array('post_parent' => $post_id, 'post_status' => 'inherit', 'post_type' => 'attachment', 'post_mime_type' => 'image', 'order' => 'ASC', 'orderby' => 'menu_order ID') );
+
+	if ($images) :
+		echo '<div class="scrollgallery">';
+
+		foreach ($images as $attachment_id => $image) :
+	
+
+			$img_title = $image->post_title;   // title.
+			$img_caption = $image->post_excerpt; // caption.
+			$img_description = $image->post_content; // description.
+
+			$img_alt = get_post_meta($attachment_id, '_wp_attachment_image_alt', true); //alt
+			if ($img_alt == '') : $img_alt = $img_title; endif;
+				
+			$big_array = image_downsize( $image->ID, 'large' );
+	 		$img_url = $big_array[0];
+			$img_width = $big_array[1];
+			$img_height = $big_array[2];
+			
+			
+			
+			
+			?>
+
+			<div class="column">
+				<?php if ($hidecaption != true ) { ?>
+				<div  class="description">
+					<p class="title"><strong><?php echo $img_title; ?></strong></p>
+					<?php if ($img_caption) : echo marty_wpautop($img_caption, 'caption'); endif; ?>
+					<?php if ($img_description) : echo wpautop($img_description); endif; ?>
+				</div>
+				<?php } ?>
+
+				<div class="image">
+					<p><img src="<?php echo $img_url; ?>" width="<?php echo $img_width; ?>" height="<?php echo $img_height; ?>" /></p>
+				</div>
+			</div>
+
+		<?php endforeach; ?>
+		</div><!-- End gallery -->
+	<?php endif;
+
+}
 
 
 ?>
